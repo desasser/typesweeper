@@ -2,7 +2,7 @@
 
 A project to practice Typescript using React and mimicing the classic game, Minesweeper
 
-## Available Scripts
+## Play Typesweeper
 
 To setup and run this game locally, please pull the repository and install the dependencies. Then run `npm start` and load the page to try it out.
 
