@@ -198,7 +198,7 @@ const GameBoard : FC<GameProps> = ({ height, width, mines}) => {
 
     useEffect(() => {
         setGameState({...gameState, boardData: initBoardData(height, width, mines)})
-    }, [height, width, mines])
+    }, [height, width, mines, gameState])
 
     // function to generate the cells
     function renderCells(boardData:any) {
