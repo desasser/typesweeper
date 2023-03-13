@@ -10,21 +10,17 @@
     position: relative;
 }
 
+.cell.hidden span {
+    display: none;
+}
+
 .cell.hidden {
     background-color: darkgray;
 }
 
-/* 
-.cell:after {
-    content: "";
-    border: 2px outset #ececec;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: #c0c0c0;;
-} */
+.cell.flagged span {
+    display: block;
+}
 
 .cell.hidden:hover{
     background-color: grey;
@@ -35,6 +31,3 @@
     color: black;
 }
 
-.cell.hidden span {
-    display: none;
-}

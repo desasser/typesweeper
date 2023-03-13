@@ -1,0 +1,14 @@
+.game-wrapper {
+    display: flex;
+    gap: 40px;
+}
+
+.size-form {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.submit-button {
+    margin-top: 20px;
+}

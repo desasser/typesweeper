@@ -1,4 +1,6 @@
 .game-board {
     display: grid;
     position: relative;
+    height: auto;
+    align-self: flex-start;
 }

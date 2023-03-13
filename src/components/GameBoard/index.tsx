@@ -1,4 +1,4 @@
-import { FC, useState } from 'react'; 
+import { FC, useState, useEffect } from 'react'; 
 import Cell from '../Cell';
 import GameWon from '../GameWon';
 import GameLoss from '../GameLoss';
@@ -35,7 +35,6 @@ function getRandom(max:number) {
 
 // function to generate a grid of cells
 function createEmptyArray(height:number, width:number) {
-    // TODO: Typing could be improved
     let data:any[] = [];
     for (let i = 0; i < width; i++) {
         data.push([]);
@@ -144,25 +143,82 @@ function traverseCells(x:number,y:number,data:any[],height:number,width:number) 
     return cellNeighbours;
 }
 
+
+// TODO: could combine these into one single utility function and param to change conditional
+// get mines
+function getMines(data:any[]) {
+    let mineArr:any[] = [];
+
+    data.map((dataRow: any[]) => {
+        dataRow.map(cell => {
+            if (cell.isMine) {
+                mineArr.push(cell);
+            }
+        });
+    });
+
+    return mineArr;
+}
+
+// get hidden cells
+function getHidden(data:any[]) {
+    let hiddenArr:any[] = [];
+
+    data.map((dataRow: any[]) => {
+        dataRow.map(cell => {
+            if (!cell.isRevealed) {
+                hiddenArr.push(cell);
+            }
+        });
+    });
+
+    return hiddenArr;
+}
+
+// get flags
+function getFlagged(data:any[]) {
+    let flagArr:any[] = [];
+
+    data.map((dataRow: any[]) => {
+        dataRow.map(cell => {
+            if (cell.isFlagged) {
+                flagArr.push(cell);
+            }
+        });
+    });
+
+    return flagArr;
+}
+
 const GameBoard : FC<GameProps> = ({ height, width, mines}) => {
+    // combine state
     const [gameState, setGameState] = useState({
         boardData: initBoardData(height, width, mines),
         mineCount: mines
     });
     const [gameEnd, setGameEndState] = useState('playing');
 
+    useEffect(() => {
+        setGameState({...gameState, boardData: initBoardData(height, width, mines)})
+    }, [height, width, mines])
+
     // function to generate the cells
     function renderCells(boardData:any) {
         return boardData.map((columnData: any[], indexA:number) => {
-            return columnData.map((rowData, indexB:number) => { 
+            return columnData.map((rowData, indexB:number) => {
                 return (
-                    <Cell onClick={() => handleCellClick(rowData.x, rowData.y)} value={rowData} key={(indexA+1)*(indexB+1)}></Cell>
-                )
+                    <Cell
+                        onClick={() => handleCellClick(rowData.x, rowData.y)}
+                        onContextMenu={(e) => handleContextMenu(e, rowData.x, rowData.y)}
+                        value={rowData}
+                        key={(indexA + 1) * (indexB + 1)}
+                    >
+                    </Cell>
+                );
             })
         })
     }
 
-    // TODO: Additional functions, context menu/right click/etc for flagging and revealing connected cells
     function handleCellClick(x:number, y:number) {
         // if user clicks on a revealed empty cell or a flagged cell, do nothing
         // TODO: Add reveal functionality for clicking an already revealed number
@@ -170,9 +226,7 @@ const GameBoard : FC<GameProps> = ({ height, width, mines}) => {
 
         // if user clicks on a cell and its a mine, game over
         if (gameState.boardData[x][y].isMine) {
-            //TODO: reveal whole board
             revealBoard(width, height, gameState.boardData);
-
             setGameEndState('loss')
         }
 
@@ -187,20 +241,22 @@ const GameBoard : FC<GameProps> = ({ height, width, mines}) => {
         }
 
         // winning states, all mines flagged || all non-mines revealed
+        if (getHidden(newData).length == mines) {
+            revealBoard(width, height, gameState.boardData);
+            setGameEndState('win');
+        }
 
-        // set state
         setGameState({
             boardData: newData,
-            mineCount: mines //TODO: modify this based on flagged cells
+            mineCount: mines - getFlagged(newData).length // track remaining mines
         });
     }
 
     // add flags via handleContextMenu
-    function handleContextMenu(event, x:number, y:number) {
+    function handleContextMenu(event:React.MouseEvent, x:number, y:number) {
         event.preventDefault();
         let newData = gameState.boardData;
         let mines = gameState.mineCount;
-        let isWin = false;
 
         // no action if cell is already revealed
         if (newData[x][y].isRevealed) return;
@@ -209,24 +265,26 @@ const GameBoard : FC<GameProps> = ({ height, width, mines}) => {
             newData[x][y].isFlagged = false;
             mines++;
         } else {
-            newData[x][y].isFlagged = true;
-            mines--
-        }
-
-        if (mines===0) {
-            const mineArr = getMines(newData);
-            const flagArr = getFlags(newData);
-            if (JSON.stringify(mineArr) === JSON.stringify(flagArr)) {
-                revealBoard();
-                console.log('You Win')
+            if (mines !== 0) {
+                newData[x][y].isFlagged = true;
+                mines--
             }
         }
+
+        // check if no mines remaining, if all flagged cells are mines, you win
+        if (mines === 0) {
+            const mineArr = getMines(newData);
+            const flagArr = getFlagged(newData);
+            if (JSON.stringify(mineArr) === JSON.stringify(flagArr)) {
+                revealBoard(width, height, gameState.boardData);
+                setGameEndState('win');
+            };
+        };
 
         setGameState({
             boardData: newData,
             mineCount: mines
         });
-        setGameEndState('win');
     }
 
     // reveal continuous empty cells and surrounding numbered cells
@@ -258,6 +316,14 @@ const GameBoard : FC<GameProps> = ({ height, width, mines}) => {
         })
     }
     
+    // reset game board
+    function resetGame() {
+        setGameState({
+            boardData: initBoardData(height, width, mines),
+            mineCount: mines
+        });
+        setGameEndState('playing');
+    }
 
     return (
         <div className="game-board" style={{gridTemplateColumns: "repeat(" + width + ",1fr)"}}>
@@ -265,8 +331,8 @@ const GameBoard : FC<GameProps> = ({ height, width, mines}) => {
                 renderCells(gameState.boardData)
             }
             {
-                gameEnd === "win" ? <GameWon/> 
-                    : gameEnd === "loss" ? <GameLoss/> 
+                gameEnd === "win" ? <GameWon onClick={resetGame}/> 
+                    : gameEnd === "loss" ? <GameLoss onClick={resetGame}/> 
                     : null
             }
         </div>

@@ -1,0 +1,16 @@
+.game-win {
+    width: 90%;
+    height: 90%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    box-shadow: 0 0 0 50vmax rgba(0,0,0,.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    padding: 5%;
+}
+/* There is probably a better way to handle the width/height/padding situation */

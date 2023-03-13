@@ -3,14 +3,18 @@ import "./style.css";
 
 interface CellType {
     onClick: React.MouseEventHandler<HTMLElement>,
-    // children: React.ReactNode,
+    onContextMenu: React.MouseEventHandler<HTMLElement>,
+    children: React.ReactNode,
     value: any
 }
 
-const Cell : FC<CellType> = ({ onClick, value }) => {
+const Cell : FC<CellType> = ({ onClick, onContextMenu, children, value }) => {
 
     function getValue() {
 
+        if (!value.isRevealed) {
+            return value.isFlagged ? "🚩" : null;
+        }
         if (value.isMine) {
             return "💣";
         };
@@ -22,10 +26,10 @@ const Cell : FC<CellType> = ({ onClick, value }) => {
     }
 
     // handle rendering revealed/hidden cells
-    let classes = "cell" + (value.isRevealed ? "" : " hidden");
+    let classes = "cell" + (value.isRevealed ? "" : " hidden") + (value.isFlagged ? " flagged" : "");
 
     return (
-        <div className={classes} onClick={onClick}>
+        <div className={classes} onClick={onClick} onContextMenu={onContextMenu}>
             <span>{getValue()}</span>
         </div>
     );
