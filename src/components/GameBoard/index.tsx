@@ -79,7 +79,7 @@ function countNeighbours(data:any, height:number, width:number,) {
             if (data[i][j].isMine !== true) {
                 let count = 0;
                 const surroundingCells: GameData[] = traverseCells(data[i][j].x,data[i][j].y,data,height,width);
-                surroundingCells.map(element => {
+                surroundingCells.forEach(element => {
                     if (element.isMine) {
                         count++;
                     }
@@ -147,8 +147,8 @@ function traverseCells(x:number,y:number,data:any[],height:number,width:number) 
 function getMines(data:any[]) {
     let mineArr:any[] = [];
 
-    data.map((dataRow: any[]) => {
-        dataRow.map(cell => {
+    data.forEach((dataRow: any[]) => {
+        dataRow.forEach(cell => {
             if (cell.isMine) {
                 mineArr.push(cell);
             }
@@ -162,8 +162,8 @@ function getMines(data:any[]) {
 function getHidden(data:any[]) {
     let hiddenArr:any[] = [];
 
-    data.map((dataRow: any[]) => {
-        dataRow.map(cell => {
+    data.forEach((dataRow: any[]) => {
+        dataRow.forEach(cell => {
             if (!cell.isRevealed) {
                 hiddenArr.push(cell);
             }
@@ -177,8 +177,8 @@ function getHidden(data:any[]) {
 function getFlagged(data:any[]) {
     let flagArr:any[] = [];
 
-    data.map((dataRow: any[]) => {
-        dataRow.map(cell => {
+    data.forEach((dataRow: any[]) => {
+        dataRow.forEach(cell => {
             if (cell.isFlagged) {
                 flagArr.push(cell);
             }
@@ -197,8 +197,9 @@ const GameBoard : FC<GameProps> = ({ height, width, mines}) => {
     const [gameEnd, setGameEndState] = useState('playing');
 
     useEffect(() => {
+        // eslint-disable-next-line
         setGameState({...gameState, boardData: initBoardData(height, width, mines)})
-    }, [height, width, mines, gameState])
+    }, [height, width, mines])
 
     // function to generate the cells
     function renderCells(boardData:any) {
@@ -239,7 +240,7 @@ const GameBoard : FC<GameProps> = ({ height, width, mines}) => {
         }
 
         // winning states, all mines flagged || all non-mines revealed
-        if (getHidden(newData).length == mines) {
+        if (getHidden(newData).length === mines) {
             revealBoard(width, height, gameState.boardData);
             setGameEndState('win');
         }
@@ -288,7 +289,7 @@ const GameBoard : FC<GameProps> = ({ height, width, mines}) => {
     // reveal continuous empty cells and surrounding numbered cells
     function revealEmptyCells(x:number, y:number, data:any[]) {
         let area = traverseCells(x,y,data,height,width);
-        area.map(cell => {
+        area.forEach(cell => {
             if (!cell.isFlagged && !cell.isRevealed && (cell.isEmpty || !cell.isMine)) {
                 data[cell.x][cell.y].isRevealed = true;
                 if (cell.isEmpty) {
