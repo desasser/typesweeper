@@ -143,8 +143,6 @@ function traverseCells(x:number,y:number,data:any[],height:number,width:number) 
     return cellNeighbours;
 }
 
-
-// TODO: could combine these into one single utility function and param to change conditional
 // get mines
 function getMines(data:any[]) {
     let mineArr:any[] = [];
@@ -221,7 +219,7 @@ const GameBoard : FC<GameProps> = ({ height, width, mines}) => {
 
     function handleCellClick(x:number, y:number) {
         // if user clicks on a revealed empty cell or a flagged cell, do nothing
-        // TODO: Add reveal functionality for clicking an already revealed number
+     
         if (gameState.boardData[x][y].isRevealed || gameState.boardData[x][y].isFlagged) return null;
 
         // if user clicks on a cell and its a mine, game over

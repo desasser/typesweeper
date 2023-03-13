@@ -9,6 +9,24 @@
     gap: 5px;
 }
 
+.size-form input {
+    font-size: 20px;
+    padding: 5px;
+    line-height: 24px;
+}
+
 .submit-button {
     margin-top: 20px;
+    background-color: orange;
+    padding: 10px 20px;
+    border-radius: 15px;
+    font-size: 20px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.5s;
+}
+
+.submit-button:hover {
+    background-color: orangered;
 }

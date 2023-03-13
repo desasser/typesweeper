@@ -5,7 +5,7 @@
     top: 0;
     left: 0;
     background-color: rgba(0, 0, 0, 0.7);
-    box-shadow: 0 0 0 50vmax rgba(0,0,0,.5);
+    box-shadow: 0 0 0 50vmax rgba(0,0,0,0.5);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -14,3 +14,20 @@
     padding: 5%;
 }
 /* There is probably a better way to handle the width/height/padding situation */
+
+.game-win button, .game-over button {
+    margin-top: 20px;
+    background-color: orange;
+    padding: 5px;
+    border-radius: 15px;
+    font-size: 20px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.5s;
+    padding: 10px 20px;
+}
+
+.game-win button:hover, .game-over button:hover {
+    background-color: orangered;
+}

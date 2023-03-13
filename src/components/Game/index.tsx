@@ -20,18 +20,15 @@ const Game : FC = () => {
         setValues({...values, [event.target.name]:event.target.value})
     };
 
-    // TODO: Form should be a component and fields should have validation
-    // TODO: Rectangular shapes break it
-    // TODO: Entering more mines than cells breaks it
     return (
         <div className="game-wrapper">
             <form className="size-form" onSubmit={(e:FormEvent) => handleSubmit(e)}>
                 <label>Height:</label>
-                <input type="text" name="height"  onChange={(e) => handleChange(e)}/>
+                <input type="text" name="height"  onChange={(e) => handleChange(e)} placeholder="Enter number here..."/>
                 <label>Width:</label>
-                <input type="text" name="width"  onChange={(e) => handleChange(e)}/>
+                <input type="text" name="width"  onChange={(e) => handleChange(e)} placeholder="Enter number here..."/>
                 <label>Mines:</label>
-                <input type="text" name="mines"  onChange={(e) => handleChange(e)}/>
+                <input type="text" name="mines"  onChange={(e) => handleChange(e)} placeholder="Enter number here..."/>
                 <button type="submit" value="Submit" className="submit-button">Play</button>
             </form>
             <GameBoard height={boardSize.height} width={boardSize.width} mines={boardSize.mines}/>

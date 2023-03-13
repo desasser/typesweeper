@@ -1,9 +1,9 @@
-import React, { useState, FC } from 'react';
+import React, { useState, ChangeEvent, FormEvent, FC } from 'react';
 import "./style.css";
 
 interface FormType {
-    onSubmit: React.FormEvent<HTMLElement>,
-    onChange: React.FormEvent<HTMLElement>
+    onSubmit: React.FormEvent<HTMLFormElement>,
+    onChange: React.ChangeEvent<HTMLInputElement>
 }
 
 const SizeForm : FC<FormType> = ({ onSubmit, onChange}) => {

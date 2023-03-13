@@ -17,5 +17,3 @@ const GameWon : FC<ResetType> = ({ onClick }) => {
 }
 
 export default GameWon;
-
-// TODO: This could be combined with GameLoss

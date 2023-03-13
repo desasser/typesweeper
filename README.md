@@ -33,3 +33,14 @@ Develop a clone of Minesweeper
 
 * Size restrictions based on screen size?
 * Gesture/Touch controls
+
+### To-Do
+
+* Form should be a separate component and fields should have validation  
+* Rectangular shapes break it  
+* Entering more mines than cells breaks it  
+* Turn off click events outside of 'modal' or set all click events outside of modal to reset game and close the modal
+* Reduce duplicate code (CSS, some utility functions, win/loss component, etc)
+* Add functionality to reveal adjacent squares when number is clicked on
+* Build context menu wheel
+* Improve modal structure and CSS
