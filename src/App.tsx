@@ -9,6 +9,7 @@ function App() {
       <header className="App-header">
         <h1>Welcome to Typesweeper</h1>
         <Game></Game>
+        <p>Disclaimer: This is a work in progress and currently has some bugs.</p>
       </header>
     </div>
   );
